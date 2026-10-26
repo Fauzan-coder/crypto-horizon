@@ -60,6 +60,10 @@ node scripts/sync-portfolio.mjs /absolute/path/to/my-portfolio
 
 This copies the shared React components, styles, read-only API and bundled fallback, and creates `/projects/crypto-horizon`. Add the project to your portfolio’s project selector. It copies no `.env`, Git metadata, or hosting credentials. The standalone app and portfolio use the same source files; rerun the script after dashboard changes.
 
+## Verify the data
+
+Run `python scripts/audit_data.py` from the repository root to fetch fresh Yahoo history and compare every stored holdout close against the provider. The published-metrics test independently recalculates MAE, RMSE, MAPE, and baseline errors from the stored observations. Historical provider revisions can produce an audit mismatch and should be investigated rather than concealed.
+
 ## Checks
 
 ```sh

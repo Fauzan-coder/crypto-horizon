@@ -1,0 +1,10 @@
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #000; color: white; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,p,figure { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button,input { font-family: inherit; font-size: inherit; }
+button { border: 0; background: transparent; color: inherit; }
+button:disabled { cursor: not-allowed; }
+::selection { background: #6ee7b7; color: #000; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

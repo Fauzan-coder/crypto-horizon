@@ -61,7 +61,27 @@ export default function Dashboard() {
       {error && <div className={styles.notice} role="alert">{error}{data ? ' Previously fetched data remains visible; check the timestamps.' : ''}</div>}
       {data?.notices.map(notice => <p className={styles.notice} key={notice} role="status">{notice}</p>)}
       {snapshotStale && <p className={styles.notice}>Forecasts are more than 36 hours old. The dates below are the original forecast dates; refreshing prices does not retrain the model.</p>}
-      {!data && !error && <div className={styles.loading} role="status"><div className={styles.loadingLine} /><p>Loading evaluated forecasts and the latest available quotes…</p></div>}
+      {!data && !error && <section className={styles.loading} role="status" aria-live="polite" aria-label="Loading market quotes and published forecasts">
+        <div className={styles.loaderVisual} aria-hidden="true">
+          <div className={styles.loaderGrid} />
+          <span className={styles.loaderCaption}>CRYPTO HORIZON / INITIALIZING</span>
+          <svg className={styles.loaderChart} viewBox="0 0 600 170" fill="none" preserveAspectRatio="xMidYMid meet">
+            <defs><linearGradient id="loader-fill" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#6ee7b7" stopOpacity=".18" /><stop offset="1" stopColor="#6ee7b7" stopOpacity="0" /></linearGradient></defs>
+            <path d="M0 133L40 126L75 140L110 101L150 113L184 79L220 98L255 68L290 87L325 43L360 61L395 32L430 56L465 24L500 40L545 18L600 29V170H0Z" fill="url(#loader-fill)" />
+            <path className={styles.loaderTrace} pathLength="1" d="M0 133L40 126L75 140L110 101L150 113L184 79L220 98L255 68L290 87L325 43L360 61L395 32L430 56L465 24L500 40L545 18L600 29" stroke="#6ee7b7" strokeWidth="2" strokeLinejoin="round" />
+          </svg>
+          <div className={styles.loaderSweep} />
+          <div className={styles.loaderSignal}><span /><span /><span /><span /><span /></div>
+        </div>
+        <div className={styles.loaderCopy}>
+          <p className={styles.loaderEyebrow}><span /> CONNECTING THE DOTS</p>
+          <h2>Your market view is on its way.</h2>
+          <p>Fetching the latest available quotes and published AutoTS forecasts.</p>
+          <div className={styles.loaderSources} aria-hidden="true"><span>Yahoo Finance</span><i>+</i><span>AutoTS forecasts</span></div>
+          <div className={styles.loaderTrack} aria-hidden="true"><span /></div>
+          <small>The dashboard will appear as soon as the data arrives.</small>
+        </div>
+      </section>}
       {data && <>
         <div className={styles.dashboard}>
           <aside className={styles.assets} aria-label="Cryptocurrency selection"><div className={styles.assetHeading}><h2>Market watch</h2><span>TOP 10</span></div><label className={styles.searchLabel}><span className={styles.srOnly}>Search cryptocurrencies</span><input placeholder="Search assets…" value={search} onChange={e => setSearch(e.target.value)} /></label><div className={styles.assetList}>{data.quotes.filter(q => `${q.name} ${q.symbol}`.toLowerCase().includes(search.toLowerCase())).map(q => <button key={q.symbol} onClick={() => { setSelected(q.symbol); setHoldout(false); }} className={`${styles.assetButton} ${selected === q.symbol ? styles.activeAsset : ''}`} aria-pressed={selected === q.symbol}><span className={styles.coinIcon}>{ticker(q.symbol).slice(0, 1)}</span><span className={styles.coinName}><strong>{ticker(q.symbol)} <small>#{q.rank}</small></strong><span>{shortName(q.name)}</span></span><span className={styles.coinPrice}><strong>{money(q.price)}</strong><span className={q.changePct !== null && q.changePct < 0 ? styles.down : styles.up}>{q.changePct === null ? 'Daily close' : percent(q.changePct)}</span></span></button>)}</div>{!data.quotes.some(q => `${q.name} ${q.symbol}`.toLowerCase().includes(search.toLowerCase())) && <p className={styles.empty}>No matching assets.</p>}<p className={styles.asideNote}>Ranked by Yahoo’s market cap. Includes stablecoins and wrapped assets when in the top 10. Quote changes are provider-reported, not forecast returns.</p></aside>
